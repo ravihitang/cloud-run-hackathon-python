@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import json
 import os
 import logging
 import random
@@ -32,8 +32,6 @@ def index():
 def move():
     request.get_data()
     logger.info(request.json)
-    
-    # TODO add your implementation here to replace the random response
     
     return moves[random.randrange(len(moves))]
 
