@@ -31,8 +31,56 @@ def index():
 @app.route("/", methods=['POST'])
 def move():
     request.get_data()
-    logger.info(request.json)
+    #logger.info(request.json)
+    dimension = request.json['arena']['dims']
     
+    mystate = request.json['arena']['state']['https://cloud-run-hackathon-python-nkqzxqazya-uc.a.run.app']
+    allstate = request.json['arena']['state']
+
+
+    if mystate['x'] == (dimension[0] - 1) and mystate['y'] == 0 :
+        for key, value in allstate.items():
+            if key != 'https://cloud-run-hackathon-python-nkqzxqazya-uc.a.run.app':
+                if mystate['x'] == value['x'] and mystate['y'] >= (value['y'] - 3):
+                    if mystate['direction'] == 'S':
+                        return 'T'
+                    elif mystate['direction'] == 'E' or mystate['direction'] == 'N':
+                        return 'R'
+                    else:
+                        return 'L'
+                elif mystate['x'] <= (value['x'] + 3) and mystate['y'] == value['y']:
+                    if mystate['direction'] == 'W':
+                        return 'T'
+                    elif mystate['direction'] == 'N' or mystate['direction'] == 'E':
+                        return 'L'
+                    else:
+                        return 'R'
+    
+    if mystate['y'] > 0:
+        if mystate['direction'] == 'N' :
+            for key, value in allstate.items():
+                if key != 'https://cloud-run-hackathon-python-nkqzxqazya-uc.a.run.app':
+                    if mystate['x'] == value['x'] and mystate['y'] <= (value['y'] + 3):
+                        return 'T'
+            return 'F'
+        elif mystate['direction'] == 'E' or mystate['direction'] == 'S':
+            return 'L'
+        elif mystate['direction'] == 'W' :
+            return 'R'
+
+    if  mystate['x'] < (dimension[0] - 1) :
+        if mystate['direction'] == 'E' :
+            for key, value in allstate.items():
+                if key != 'https://cloud-run-hackathon-python-nkqzxqazya-uc.a.run.app':
+                    if mystate['x'] >= (value['x'] - 3) and mystate['y'] == value['y']:
+                        return 'T'
+            return 'F'
+        elif mystate['direction'] == 'W' or mystate['direction'] == 'N':
+            return 'R'
+        elif mystate['direction'] == 'S' :
+            return 'L'
+
+    return 'T'
     return moves[random.randrange(len(moves))]
 
 if __name__ == "__main__":
